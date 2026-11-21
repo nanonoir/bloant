@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Fast by default. Adaptive by design.</strong><br />
-  A portable multi-harness agent setup for <strong>OpenCode</strong>, <strong>Pi</strong>, and <strong>Antigravity CLI</strong> — built for speed, pragmatism, and complexity on demand.
+  A portable multi-harness agent setup for <strong>OpenCode</strong>, <strong>Pi</strong>, <strong>Antigravity CLI</strong>, <strong>Claude Code</strong>, and <strong>Codex CLI</strong> — built for speed, pragmatism, and complexity on demand.
 </p>
 
 <p align="center">
@@ -43,7 +43,7 @@
 | **Medium** | Scoped exploration + targeted implementation | Selective delegation (`explorer`, `implementer`) + focused tests |
 | **Large** | Coordinated multi-agent delivery | ExecPlans, independent review (`reviewer`, `fix-agent`), and closure (`archiver`) |
 
-All three harnesses share the same role contracts (`explorer`, `specs-writer`, `designer`, `implementer`, `reviewer`, `fix-agent`, `archiver`, `init`, plus `teacher` mode for guided learning) and the same progressive-disclosure documentation model (`AGENTS.md` → `ARCHITECTURE.md` → `docs/` → `exec-plans/{active,completed}`).
+All five harnesses share the same role contracts (`explorer`, `specs-writer`, `designer`, `implementer`, `reviewer`, `fix-agent`, `archiver`, `init`, plus `teacher` mode for guided learning) and the same progressive-disclosure documentation model (`AGENTS.md` → `ARCHITECTURE.md` → `docs/` → `exec-plans/{active,completed}`).
 
 ---
 
@@ -54,7 +54,9 @@ All three harnesses share the same role contracts (`explorer`, `specs-writer`, `
 | [`opencode/`](./opencode) | `~/.config/opencode` | Global `AGENTS.md`, 9 agent roles, `/init` command, `@slkiser/opencode-quota` (Claude + Codex), `sub-agent-statusline`, and portable `opencode.json` / `cli.json` templates |
 | [`pi/`](./pi) | `~/.pi/agent` | `AGENTS.md` + `APPEND_SYSTEM.md`, 8 specialist roles, `opencode-permissions` & `subagent` extensions, `teacher` mode, themes (`opencode-clean`, `steel-blue`), and `settings.json` |
 | [`agy/`](./agy) | `~/.gemini/config` & `~/.gemini/antigravity-cli` | Plugin-free Antigravity CLI harness: unified `AGENTS.md` with exact-model `swarm` routing, 8 subagents + `teacher`, `/init` skill, `skills.json`, `mcp_config.json`, and OpenCode-style `statusline.mjs` (AGY 5h/7d quota bars) |
-| [`skills/`](./skills) | `~/.agents/skills` | 30 shared, on-demand skills loaded across all three harnesses |
+| [`claude/`](./claude) | `~/.claude` & `~/.claude.json` (`mcpServers`) | Claude Code harness: unified `CLAUDE.md` (deduplicated with OpenCode), 9 native subagents (`haiku`/`sonnet`/`opus` at `medium` effort), `/init-harness` skill, 4 MCP servers merged non-destructively, `settings.json` defaults, and OpenCode-style `statusline.mjs` |
+| [`codex/`](./codex) | `~/.codex` | Codex CLI harness: `AGENTS.md`, `config.toml` (`gpt-6.2-sol` low orchestrator, `multi_agent = true`, 4 MCP servers with env-based auth), 9 TOML subagent configs (`gpt-6.2-sol` / `gpt-6-luna` / `gpt-6.1-terra` at `medium` effort), and `/init-harness` skill |
+| [`skills/`](./skills) | `~/.agents/skills` | 30 shared, on-demand skills loaded across OpenCode, Pi, AGY, and Codex |
 | [`scripts/sync.ps1`](./scripts/sync.ps1) | — | Idempotent Windows deployment script with `-DryRun` and `-InstallDeps` |
 
 ```text
@@ -92,6 +94,20 @@ bloant/
 │   ├── agents/
 │   └── skills/
 │       └── init/SKILL.md
+├── claude/
+│   ├── CLAUDE.md
+│   ├── settings.json
+│   ├── mcp.json
+│   ├── statusline.mjs
+│   ├── agents/
+│   └── skills/
+│       └── init-harness/SKILL.md
+├── codex/
+│   ├── AGENTS.md
+│   ├── config.toml
+│   ├── agents/
+│   └── skills/
+│       └── init-harness/SKILL.md
 ├── skills/
 └── scripts/
     └── sync.ps1
@@ -115,8 +131,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\sync.ps1 -InstallDeps
 
 What `sync.ps1` does automatically:
 1. Resolves machine-specific placeholders (`{{OPENCODE_CONFIG_DIR}}`, `{{NPM_GLOBAL_BIN_DIR}}`, `{{SKILLS_DIR}}`, and `{{GITHUB_PERSONAL_ACCESS_TOKEN}}`).
-2. Copies OpenCode, Pi, Antigravity CLI, and shared skills into their standard user directories.
-3. Enables the custom `statusline.mjs` in `~/.gemini/antigravity-cli/settings.json` while preserving your existing CLI settings.
+2. Copies OpenCode, Pi, Antigravity CLI, Claude Code, Codex CLI, and shared skills into their standard user directories.
+3. Enables the custom `statusline.mjs` in `~/.gemini/antigravity-cli/settings.json` and `~/.claude/settings.json`, and merges Claude `mcpServers` into `~/.claude.json` without touching auth or session state.
 4. Preserves local `deviceId`, secrets, auth files, caches, and session history.
 
 ---

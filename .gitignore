@@ -19,11 +19,18 @@ antigravity-dashboard-logs.json.*
 antigravity-logs/
 antigravity-auth-vault/
 antigravity-bridge/
+.credentials.json
+.claude.json
+.claude.json.backup.*
 
 # Runtime state, sessions & backups
 sessions/
 missions/
 logs/
+backups/
+downloads/
+plugins/
+history.jsonl
 *.db
 *.db-shm
 *.db-wal

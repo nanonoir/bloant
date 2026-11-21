@@ -11,6 +11,9 @@ $UserHomeFwd = $UserHome -replace '\\', '/'
 $OpenCodeTarget = Join-Path $UserHome '.config\opencode'
 $PiTarget = Join-Path $UserHome '.pi\agent'
 $AgyTarget = Join-Path $UserHome '.gemini\config'
+$ClaudeTarget = Join-Path $UserHome '.claude'
+$ClaudeStateFile = Join-Path $UserHome '.claude.json'
+$CodexTarget = Join-Path $UserHome '.codex'
 $SkillsTarget = Join-Path $UserHome '.agents\skills'
 $NpmGlobalFwd = ($env:APPDATA -replace '\\', '/') + '/npm'
 
@@ -68,6 +71,8 @@ Write-Host "Deploying bloant harnesses..."
 Write-Host "  OpenCode -> $OpenCodeTarget"
 Write-Host "  Pi       -> $PiTarget"
 Write-Host "  AGY      -> $AgyTarget"
+Write-Host "  Claude   -> $ClaudeTarget"
+Write-Host "  Codex    -> $CodexTarget"
 Write-Host "  Skills   -> $SkillsTarget"
 
 # 1. OpenCode
@@ -185,10 +190,114 @@ if (Test-Path $AgyRepo) {
     }
 }
 
-# 4. Skills
-Copy-Tree (Join-Path $RepoRoot 'skills') $SkillsTarget
+# 4. Claude Code (preserves .credentials.json, .claude.json session/oauth state, and synced skills)
+$ClaudeRepo = Join-Path $RepoRoot 'claude'
+if (Test-Path $ClaudeRepo) {
+    foreach ($sub in @('agents', 'skills')) {
+        $claudeSub = Join-Path $ClaudeRepo $sub
+        if (Test-Path $claudeSub) {
+            Copy-Tree $claudeSub (Join-Path $ClaudeTarget $sub)
+        }
+    }
+    foreach ($file in @('CLAUDE.md', 'statusline.mjs')) {
+        $srcFile = Join-Path $ClaudeRepo $file
+        if (Test-Path $srcFile) {
+            if ($DryRun) {
+                Write-Host "[DryRun] copy $file -> $(Join-Path $ClaudeTarget $file)"
+            } else {
+                Ensure-Dir $ClaudeTarget
+                Copy-Item -Path $srcFile -Destination (Join-Path $ClaudeTarget $file) -Force
+            }
+        }
+    }
 
-# 4. Optional dependency install
+    # Merge portable defaults + statusLine into ~/.claude/settings.json
+    $claudeSettingsSrc = Join-Path $ClaudeRepo 'settings.json'
+    $claudeSettingsDst = Join-Path $ClaudeTarget 'settings.json'
+    $claudeSlDst = Join-Path $ClaudeTarget 'statusline.mjs'
+    if (Test-Path $claudeSettingsSrc) {
+        if ($DryRun) {
+            Write-Host "[DryRun] merge settings.json + statusLine -> $claudeSettingsDst"
+        } else {
+            Ensure-Dir $ClaudeTarget
+            $defaults = Get-Content $claudeSettingsSrc -Raw -Encoding UTF8 | ConvertFrom-Json
+            $existing = if (Test-Path $claudeSettingsDst) {
+                try { Get-Content $claudeSettingsDst -Raw -Encoding UTF8 | ConvertFrom-Json } catch { [pscustomobject]@{} }
+            } else { [pscustomobject]@{} }
+            foreach ($prop in $defaults.PSObject.Properties) {
+                $existing | Add-Member -NotePropertyName $prop.Name -NotePropertyValue $prop.Value -Force
+            }
+            if (Test-Path $claudeSlDst) {
+                $slCfg = [pscustomobject]@{
+                    type = 'command'
+                    command = "node $($claudeSlDst -replace '\\', '/')"
+                    padding = 0
+                }
+                $existing | Add-Member -NotePropertyName 'statusLine' -NotePropertyValue $slCfg -Force
+            }
+            $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+            [System.IO.File]::WriteAllText($claudeSettingsDst, ($existing | ConvertTo-Json -Depth 10) + "`n", $utf8NoBom)
+        }
+    }
+
+    # Merge mcpServers from bloant/claude/mcp.json into ~/.claude.json without touching auth/session state
+    $claudeMcpSrc = Join-Path $ClaudeRepo 'mcp.json'
+    if (Test-Path $claudeMcpSrc) {
+        if ($DryRun) {
+            Write-Host "[DryRun] merge mcpServers -> $ClaudeStateFile"
+        } else {
+            $mcpRaw = [System.IO.File]::ReadAllText($claudeMcpSrc)
+            if ($mcpRaw.Contains('{{GITHUB_PERSONAL_ACCESS_TOKEN}}')) {
+                $ghToken = $env:GITHUB_PERSONAL_ACCESS_TOKEN
+                if (-not $ghToken) {
+                    Write-Warning "GITHUB_PERSONAL_ACCESS_TOKEN is not set; leaving placeholder in Claude mcpServers"
+                } else {
+                    $mcpRaw = $mcpRaw.Replace('{{GITHUB_PERSONAL_ACCESS_TOKEN}}', $ghToken)
+                }
+            }
+            $mcpObj = $mcpRaw | ConvertFrom-Json
+            $stateObj = if (Test-Path $ClaudeStateFile) {
+                try { Get-Content $ClaudeStateFile -Raw -Encoding UTF8 | ConvertFrom-Json } catch { [pscustomobject]@{} }
+            } else { [pscustomobject]@{} }
+            if (-not $stateObj.PSObject.Properties['mcpServers'] -or -not $stateObj.mcpServers) {
+                $stateObj | Add-Member -NotePropertyName 'mcpServers' -NotePropertyValue ([pscustomobject]@{}) -Force
+            }
+            foreach ($srv in $mcpObj.mcpServers.PSObject.Properties) {
+                $stateObj.mcpServers | Add-Member -NotePropertyName $srv.Name -NotePropertyValue $srv.Value -Force
+            }
+            $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+            [System.IO.File]::WriteAllText($ClaudeStateFile, ($stateObj | ConvertTo-Json -Depth 16) + "`n", $utf8NoBom)
+        }
+    }
+}
+
+# 5. Codex CLI (preserves auth.json, history.jsonl, and sessions/)
+$CodexRepo = Join-Path $RepoRoot 'codex'
+if (Test-Path $CodexRepo) {
+    foreach ($sub in @('agents', 'skills')) {
+        $codexSub = Join-Path $CodexRepo $sub
+        if (Test-Path $codexSub) {
+            Copy-Tree $codexSub (Join-Path $CodexTarget $sub)
+        }
+    }
+    foreach ($file in @('AGENTS.md', 'config.toml')) {
+        $srcFile = Join-Path $CodexRepo $file
+        if (Test-Path $srcFile) {
+            if ($DryRun) {
+                Write-Host "[DryRun] copy $file -> $(Join-Path $CodexTarget $file)"
+            } else {
+                Ensure-Dir $CodexTarget
+                Copy-Item -Path $srcFile -Destination (Join-Path $CodexTarget $file) -Force
+            }
+        }
+    }
+}
+
+# 6. Skills (shared ~/.agents/skills; Claude keeps only claude/skills/init-harness to avoid duplicate skill catalogs in OpenCode)
+$SkillsRepo = Join-Path $RepoRoot 'skills'
+Copy-Tree $SkillsRepo $SkillsTarget
+
+# 7. Optional dependency install
 if ($InstallDeps -and -not $DryRun) {
     Write-Host "Installing OpenCode root dependencies..."
     Push-Location $OpenCodeTarget
