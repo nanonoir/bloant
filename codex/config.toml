@@ -1,0 +1,73 @@
+# Bloant — Codex CLI portable configuration
+# Orchestrator defaults
+model = "gpt-6.2-sol"
+model_reasoning_effort = "low"
+sandbox_mode = "workspace-write"
+
+[features]
+multi_agent = true
+
+[agents]
+max_threads = 8
+max_depth = 2
+
+[agents.explorer]
+description = "Investigate the repository and report relevant findings."
+config_file = "agents/explorer.toml"
+
+[agents.archiver]
+description = "Close important work, reconcile durable project knowledge, and complete ExecPlans."
+config_file = "agents/archiver.toml"
+
+[agents.designer]
+description = "Resolve and document significant technical design decisions."
+config_file = "agents/designer.toml"
+
+[agents."specs-writer"]
+description = "Create and maintain canonical product specifications from agreed requirements."
+config_file = "agents/specs-writer.toml"
+
+[agents.implementer]
+description = "Implement concrete delegated changes with focused self-checks."
+config_file = "agents/implementer.toml"
+
+[agents."fix-agent"]
+description = "Apply focused and validated corrections to concrete identified issues."
+config_file = "agents/fix-agent.toml"
+
+[agents.reviewer]
+description = "Independently review requirement/design compliance plus engineering quality and validate acceptance."
+config_file = "agents/reviewer.toml"
+
+[agents.init]
+description = "Initialize, update, or migrate a repository's documentation harness."
+config_file = "agents/init.toml"
+
+[agents.teacher]
+description = "Guided technical learning from theory to hands-on practice with short explanations, exercises, code review, and a technical glossary."
+config_file = "agents/teacher.toml"
+
+# MCP servers (secrets read from environment variables, never hardcoded)
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+
+[mcp_servers.codegraph]
+command = "codegraph"
+args = ["serve", "--mcp"]
+
+[mcp_servers.playwright]
+command = "npx"
+args = [
+  "-y",
+  "@playwright/mcp@latest",
+  "--caps=devtools",
+  "--viewport-size=1920x1080",
+  "--output-dir=./recordings",
+]
+
+[mcp_servers.github]
+url = "https://api.githubcopilot.com/mcp/"
+bearer_token_env_var = "GITHUB_PERSONAL_ACCESS_TOKEN"
+
+[mcp_servers.github.http_headers]
+"X-MCP-Toolsets" = "repos,projects,issues,pull_requests,actions"
