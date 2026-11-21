@@ -1,0 +1,75 @@
+{
+  "name": "opencode-subagent-statusline",
+  "version": "2.0.0",
+  "description": "OpenCode plugin that exposes subagent session statusline state",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Joaquinvesapa/sub-agent-statusline"
+  },
+  "packageManager": "pnpm@11.2.2",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "main": "./dist/tui.js",
+  "types": "./dist/tui.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/tui.d.ts",
+      "import": "./dist/tui.js"
+    },
+    "./tui": {
+      "types": "./dist/tui.d.ts",
+      "import": "./dist/tui.js"
+    },
+    "./runtime": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "assets",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepack": "pnpm run build",
+    "audit:prod": "pnpm audit --prod --audit-level moderate",
+    "pack:dry-run": "pnpm pack --dry-run",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "dev": "tsup --watch"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "statusline",
+    "subagent"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@opencode/plugin": ">=2.0.0 <3",
+    "@opentui/core": ">=0.5.0 <0.7",
+    "@opentui/solid": ">=0.5.0 <0.7",
+    "solid-js": ">=1.9.12 <2"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.15.11",
+    "@opencode/plugin": "^2.0.7",
+    "@opentui/core": "^0.5.10",
+    "@opentui/solid": "^0.5.10",
+    "@types/node": "^22.19.19",
+    "@vitest/coverage-v8": "^4.1.7",
+    "esbuild-plugin-solid": "^0.6.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.7"
+  }
+}

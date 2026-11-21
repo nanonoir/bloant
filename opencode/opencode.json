@@ -1,0 +1,179 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "model": "openai/gpt-6.1-sol",
+    "default_agent": "orchestrator",
+    "share": "disabled",
+    "permissions": [
+        {
+            "action": "skill",
+            "resource": "built-in-browser",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "chrome-browser",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "computer-use",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "deep-research",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "docs",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "docx",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "google-workspace",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "import-memory",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "morning",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "pdf",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "pptx",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "skill-creator",
+            "effect": "deny"
+        },
+        {
+            "action": "skill",
+            "resource": "xlsx",
+            "effect": "deny"
+        }
+    ],
+    "compaction": {
+        "auto": true,
+        "buffer": 10000
+    },
+    "mcp": {
+        "servers": {
+            "context7": {
+                "type": "remote",
+                "url": "https://mcp.context7.com/mcp",
+                "disabled": false
+            },
+            "codegraph": {
+                "type": "local",
+                "command": [
+                    "codegraph",
+                    "serve",
+                    "--mcp"
+                ],
+                "disabled": false
+            },
+            "playwright": {
+                "type": "local",
+                "command": [
+                    "npx",
+                    "-y",
+                    "@playwright/mcp@latest",
+                    "--caps=devtools",
+                    "--viewport-size=1920x1080",
+                    "--output-dir=./recordings"
+                ],
+                "disabled": false
+            },
+            "github": {
+                "type": "remote",
+                "url": "https://api.githubcopilot.com/mcp/",
+                "oauth": false,
+                "headers": {
+                    "Authorization": "Bearer {env:GITHUB_PERSONAL_ACCESS_TOKEN}",
+                    "X-MCP-Toolsets": "repos,projects,issues,pull_requests,actions"
+                }
+            },
+            "mercadopago": {
+                "type": "remote",
+                "url": "https://mcp.mercadopago.com/mcp",
+                "disabled": true
+            }
+        }
+    },
+    "agents": {
+        "orchestrator": {
+            "description": "Primary agent for user collaboration, direct work, delegation, and Git delivery",
+            "mode": "primary",
+            "model": "claude-code/claude-opus-5-5#low"
+        },
+        "explorer": {
+            "description": "Investigate the repository and report relevant findings",
+            "mode": "subagent",
+            "model": "claude-code/claude-haiku-5-5#medium"
+        },
+        "specs-writer": {
+            "description": "Create and maintain canonical product specifications from agreed requirements",
+            "mode": "subagent",
+            "model": "openai/gpt-6.1-terra#high"
+        },
+        "designer": {
+            "description": "Resolve and document significant technical design decisions",
+            "mode": "subagent",
+            "model": "openai/gpt-6.2-sol#medium"
+        },
+        "implementer": {
+            "description": "Implement concrete delegated changes",
+            "mode": "subagent",
+            "model": "claude-code/claude-sonnet-5-5#medium"
+        },
+        "reviewer": {
+            "description": "Independently review requirement and design compliance plus engineering quality, and validate acceptance",
+            "mode": "subagent",
+            "model": "openai/gpt-6.1-terra#medium"
+        },
+        "fix-agent": {
+            "description": "Apply focused and validated corrections to concrete identified issues",
+            "mode": "subagent",
+            "model": "claude-code/claude-sonnet-5-5#medium"
+        },
+        "archiver": {
+            "description": "Close important work, reconcile durable project knowledge, and complete ExecPlans",
+            "mode": "subagent",
+            "model": "openai/gpt-6-luna#medium"
+        },
+        "teacher": {
+            "description": "Teacher - guided technical learning from theory to hands-on practice with short explanations, exercises, code review, and a technical glossary",
+            "mode": "primary",
+            "model": "openai/gpt-6-luna#high",
+            "system": "You are the primary Teacher agent for technical learning and guided research. Teach progressively from theory to practice. Explain one concept or small group of tightly related concepts at a time; never dump a textbook-sized answer when the topic can be learned incrementally. Start with the essential mental model, make it tangible with a minimal example, then move toward hands-on practice. Give the user room to ask follow-up questions before expanding into adjacent concepts. For practical learning, use a `.learning/<topic>/` workspace inside the current project by default. Do not initialize nested Git repositories unless the user explicitly asks; keep `.learning/` isolated from production code and recommend ignoring it from the parent repository when appropriate. Prefer exercises where the user manually creates files, writes code, runs commands, or predicts behavior before you provide the solution. Give precise instructions about what file to create and what objective to achieve, but do not write the exercise solution for the user unless explicitly requested. You may create scaffolding, fixtures, small sample projects, or supporting files when they help learning, while keeping the core exercise for the user to implement manually. Read and review the user's practice files, identify mistakes, explain why they are wrong, and guide corrections without immediately replacing their work. When studying an existing codebase, connect theory to concrete code from that project. Keep responses concise and progressive. Always end substantive teaching responses with a `Glossary` section containing short definitions only for technical terms introduced or materially used in that response. Do not pad the glossary with already-obvious terms. The goal is understanding, practice, and independent reasoning, not merely producing finished code."
+        }
+    },
+    "plugins": [
+        "@slkiser/opencode-quota",
+        "@openchamber/opencode-claude"
+    ],
+    "provider": {
+        "openai": {},
+        "google-agy": {},
+        "opencode-go": {},
+        "anthropic": {}
+    }
+}

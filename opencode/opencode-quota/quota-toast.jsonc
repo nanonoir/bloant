@@ -1,0 +1,22 @@
+{
+  "enabledProviders": ["anthropic", "openai"],
+  "formatStyle": "allWindows",
+  "percentDisplayMode": "remaining",
+
+  "anthropicBinaryPath": "{{NPM_GLOBAL_BIN_DIR}}/claude.cmd",
+
+  "tuiSidebarPanel": {
+    "enabled": true,
+    "formatStyle": "allWindows"
+  },
+
+  "tuiCompactStatus": {
+    "enabled": false
+  },
+
+  "enableToast": false,
+  "tuiCommandDisplay": "inline",
+
+  "showSessionTokens": true,
+  "sessionTokenScope": "tree"
+}
