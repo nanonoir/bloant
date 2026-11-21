@@ -1,0 +1,183 @@
+{
+  "version": 2,
+  "defaultProfile": "balance",
+  "order": [
+    "balance",
+    "claude",
+    "codex",
+    "gemini",
+    "teacher"
+  ],
+  "profiles": {
+    "balance": {
+      "default": {
+        "model": "openai/gpt-6.1-terra",
+        "thinking": "medium"
+      },
+      "main": {
+        "model": "openai/gpt-6.1-sol",
+        "thinking": "medium"
+      },
+      "agents": {
+        "archiver": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "designer": {
+          "model": "openai/gpt-6.1-sol",
+          "thinking": "high"
+        },
+        "explorer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "fix-agent": {
+          "model": "openai/gpt-6.1-terra",
+          "thinking": "high"
+        },
+        "implementer": {
+          "model": "claude-code/claude-sonnet-5-5",
+          "thinking": "medium"
+        },
+        "reviewer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "specs-writer": {
+          "model": "openai/gpt-6.1-terra",
+          "thinking": "high"
+        },
+        "init": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        }
+      }
+    },
+    "claude": {
+      "default": {
+        "model": "claude-code/claude-sonnet-5-5",
+        "thinking": "medium"
+      },
+      "main": {
+        "model": "claude-code/claude-opus-5-5",
+        "thinking": "medium"
+      },
+      "agents": {
+        "archiver": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "designer": {
+          "model": "openai/gpt-6.1-sol",
+          "thinking": "high"
+        },
+        "explorer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "fix-agent": {
+          "model": "claude-code/claude-sonnet-5-5",
+          "thinking": "medium"
+        },
+        "implementer": {
+          "model": "claude-code/claude-sonnet-5-5",
+          "thinking": "medium"
+        },
+        "reviewer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "specs-writer": {
+          "model": "openai/gpt-6.1-terra",
+          "thinking": "high"
+        }
+      }
+    },
+    "codex": {
+      "default": {
+        "model": "openai/gpt-6.1-terra",
+        "thinking": "medium"
+      },
+      "main": {
+        "model": "openai/gpt-6.1-sol",
+        "thinking": "medium"
+      },
+      "agents": {
+        "archiver": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "designer": {
+          "model": "openai/gpt-6.1-sol",
+          "thinking": "high"
+        },
+        "explorer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "fix-agent": {
+          "model": "claude-code/claude-sonnet-5-5",
+          "thinking": "medium"
+        },
+        "implementer": {
+          "model": "openai/gpt-6.1-terra",
+          "thinking": "medium"
+        },
+        "reviewer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "specs-writer": {
+          "model": "openai/gpt-6.1-terra",
+          "thinking": "high"
+        }
+      }
+    },
+    "gemini": {
+      "default": {
+        "model": "antigravity/gemini-3-8-flash",
+        "thinking": "high"
+      },
+      "agents": {
+        "reviewer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "archiver": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "designer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "explorer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "fix-agent": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "implementer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "init": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        },
+        "specs-writer": {
+          "model": "antigravity/gemini-3-8-flash",
+          "thinking": "high"
+        }
+      }
+    },
+    "teacher": {
+      "main": {
+        "model": "antigravity/gemini-3-8-flash",
+        "thinking": "high"
+      }
+    }
+  }
+}

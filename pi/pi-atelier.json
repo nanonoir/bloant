@@ -1,0 +1,121 @@
+{
+  "preset": "editorial",
+  "density": "comfortable",
+  "segmentLayout": [
+    {
+      "id": "brand",
+      "visible": false
+    },
+    {
+      "id": "activity",
+      "visible": true
+    },
+    {
+      "id": "metrics",
+      "visible": true
+    },
+    {
+      "id": "performance",
+      "visible": false
+    },
+    {
+      "id": "context",
+      "visible": true
+    },
+    {
+      "id": "model",
+      "visible": true
+    },
+    {
+      "id": "git",
+      "visible": true
+    },
+    {
+      "id": "statuses",
+      "visible": true
+    },
+    {
+      "id": "menu",
+      "visible": true
+    }
+  ],
+  "nerdFont": true,
+  "showFooter": true,
+  "showSidebarOnStartup": true,
+  "completionNotifications": true,
+  "showSidebarToolNames": false,
+  "sidebarPanelLayout": [
+    {
+      "id": "agent",
+      "visible": false
+    },
+    {
+      "id": "activity",
+      "visible": false
+    },
+    {
+      "id": "alerts",
+      "visible": true
+    },
+    {
+      "id": "todos",
+      "visible": false
+    },
+    {
+      "id": "context",
+      "visible": true
+    },
+    {
+      "id": "prefill",
+      "visible": true
+    },
+    {
+      "id": "workspace",
+      "visible": true
+    },
+    {
+      "id": "usage",
+      "visible": false
+    },
+    {
+      "id": "subagents",
+      "visible": true
+    },
+    {
+      "id": "tools",
+      "visible": false
+    },
+    {
+      "id": "subscription-spike:codex",
+      "visible": true
+    },
+    {
+      "id": "subscription-spike:claude-code",
+      "visible": true
+    },
+    {
+      "id": "subscription-spike:antigravity",
+      "visible": true
+    },
+    {
+      "id": "subscription:limits",
+      "visible": true
+    },
+    {
+      "id": "subscription:claude-code",
+      "visible": true
+    },
+    {
+      "id": "subscription:antigravity",
+      "visible": true
+    },
+    {
+      "id": "subscription:anthropic",
+      "visible": false
+    },
+    {
+      "id": "subagents-bar:subagents",
+      "visible": true
+    }
+  ]
+}

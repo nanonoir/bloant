@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "displayMode": "remaining",
+  "expandedProviders": [
+    "codex",
+    "claude-code",
+    "antigravity",
+    "anthropic"
+  ],
+  "refresh": {
+    "codexSeconds": 60,
+    "claude": {
+      "mode": "response-event"
+    },
+    "antigravity": {
+      "mode": "auto",
+      "activeSeconds": 180,
+      "idleSeconds": 1200
+    },
+    "whileCollapsed": true
+  },
+  "staleAfterSeconds": 180
+}

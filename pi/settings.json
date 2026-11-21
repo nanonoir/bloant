@@ -1,0 +1,33 @@
+{
+  "packages": [
+    "npm:@estebanforge/pi-antigravity-bridge",
+    "npm:pi-subagents",
+    "npm:pi-context-prune",
+    "npm:pi-web-access",
+    "npm:pi-btw",
+    "npm:@heyhuynhgiabuu/pi-pretty",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "https://github.com/earendil-works/pi-claude-code",
+    "npm:pi-atelier",
+    "npm:pi-subscription-limits",
+    "git:github.com/nanonoir/pi-profile-cycler@v1.2.0",
+    "https://github.com/nanonoir/pi-subscription-panel",
+    "git:github.com/nanonoir/pi-subagents-bar"
+  ],
+  "piAgents": {
+    "maxWorkingAgents": 8
+  },
+  "subagents": {
+    "agentExcludeDirs": [
+      "~/.agents"
+    ]
+  },
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 10000
+  },
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-6.1-sol",
+  "defaultThinkingLevel": "medium",
+  "theme": "opencode-clean"
+}

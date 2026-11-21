@@ -1,0 +1,8 @@
+{
+	"toolActivation": "eager",
+	"globalConcurrencyLimit": 8,
+	"maxActiveAsyncRunsPerSession": 8,
+	"inlineToolDisplay": "summary",
+  	"fleetView": true,
+  	"asyncWidget": false
+}
