@@ -1,0 +1,37 @@
+# Dependencies & build caches
+node_modules/
+.pnpm-store/
+*.tsbuildinfo
+
+# Secrets & local credentials (never commit)
+.env
+.env.*
+!.env.example
+service.json
+auth.json
+mcp-auth.json
+account.json
+antigravity-accounts.json
+antigravity-accounts.json.*
+antigravity-signature-cache.json
+antigravity-dashboard-logs.json
+antigravity-dashboard-logs.json.*
+antigravity-logs/
+antigravity-auth-vault/
+antigravity-bridge/
+
+# Runtime state, sessions & backups
+sessions/
+missions/
+logs/
+*.db
+*.db-shm
+*.db-wal
+*.bak
+*.bak.*
+*.backup-*
+*.tmp
+
+# OS noise
+.DS_Store
+Thumbs.db
