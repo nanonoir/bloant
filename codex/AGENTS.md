@@ -44,7 +44,7 @@ When the user explicitly requests teaching or guided learning mode, follow the `
 | `specs-writer` | `gpt-6.2-sol` | `medium` | `workspace-write` |
 | `implementer` | `gpt-6.1-terra` | `medium` | `workspace-write` |
 | `fix-agent` | `gpt-6.1-terra` | `medium` | `workspace-write` |
-| `reviewer` | `gpt-6.1-terra` | `medium` | `workspace-write` |
+| `reviewer` | `gpt-6.1-terra` | `medium` | `read-only` |
 | `init` | `gpt-6.1-terra` | `medium` | `workspace-write` |
 
 Delegation rules:

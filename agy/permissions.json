@@ -1,0 +1,40 @@
+{
+  "allow": [
+    "read_file(*)",
+    "write_file(*)",
+    "command(*)",
+    "mcp(*)"
+  ],
+  "ask": [
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*push\\b)",
+    "command(regex:\\bgh\\s+pr\\s+(create|merge)\\b)"
+  ],
+  "deny": [
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*reset\\b.*--hard)",
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*clean\\b)",
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*push\\b.*(--force|\\s-[a-zA-Z]*[fd][a-zA-Z]*\\b|--mirror|--delete))",
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*push\\b.*\\s(\\+|:[A-Za-z0-9_./-]+))",
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*checkout\\b.*(--\\s|\\s\\.($|[\\s;&|])|--force|\\s-f\\b|\\s-B\\b))",
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*switch\\b.*(--discard-changes|--force|\\s-f\\b))",
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*restore\\b)",
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*branch\\b.*(--force|\\s-f\\b))",
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*stash\\b.*\\b(clear|drop)\\b)",
+    "command(regex:\\bgit\\s+(?:-\\S+(?:\\s+\\S+)?\\s+)*filter-(branch|repo)\\b)",
+    "read_file(**/*.key)",
+    "read_file(**/*.pem)",
+    "read_file(**/.aws/credentials)",
+    "read_file(**/.config/gh/hosts.yml)",
+    "read_file(**/.credentials/**)",
+    "read_file(**/.env)",
+    "read_file(**/.env.*)",
+    "read_file(**/.ssh/**)",
+    "read_file(**/Library/Keychains/**)",
+    "read_file(**/credentials.json)",
+    "read_file(**/secrets/**)",
+    "read_file(*.env)",
+    "read_file(*.env.*)",
+    "read_file(.env)",
+    "read_file(.ssh/)",
+    "read_file(secrets/)"
+  ]
+}

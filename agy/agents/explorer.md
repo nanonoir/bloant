@@ -3,6 +3,9 @@ name: explorer
 description: Investigate the repository and report relevant findings.
 model: flash
 subagent: true
+disallowedTools:
+  - write_file
+  - edit_file
 ---
 
 # Explorer

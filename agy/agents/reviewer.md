@@ -3,6 +3,9 @@ name: reviewer
 description: Independently review requirement/design compliance plus engineering quality and validate acceptance.
 model: pro
 subagent: true
+disallowedTools:
+  - write_file
+  - edit_file
 ---
 
 # Reviewer

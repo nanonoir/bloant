@@ -53,7 +53,7 @@ All five harnesses share the same role contracts (`explorer`, `specs-writer`, `d
 | :--- | :--- | :--- |
 | [`opencode/`](./opencode) | `~/.config/opencode` | Global `AGENTS.md`, 9 agent roles, `/init` command, `@slkiser/opencode-quota` (Claude + Codex), `sub-agent-statusline`, and portable `opencode.json` / `cli.json` templates |
 | [`pi/`](./pi) | `~/.pi/agent` | `AGENTS.md` + `APPEND_SYSTEM.md`, 8 specialist roles, `opencode-permissions` & `subagent` extensions, `teacher` mode, themes (`opencode-clean`, `steel-blue`), and `settings.json` |
-| [`agy/`](./agy) | `~/.gemini/config` & `~/.gemini/antigravity-cli` | Plugin-free Antigravity CLI harness: unified `AGENTS.md` with exact-model `swarm` routing, 8 subagents + `teacher`, `/init` skill, `skills.json`, `mcp_config.json`, and OpenCode-style `statusline.mjs` (AGY 5h/7d quota bars) |
+| [`agy/`](./agy) | `~/.gemini/config` & `~/.gemini/antigravity-cli` | Plugin-free Antigravity CLI harness: unified `AGENTS.md` with exact-model `swarm` routing, 8 subagents + `teacher`, `/init` skill, `skills.json`, `mcp_config.json`, `permissions.json` (`allow`/`ask`/`deny` guardrails mirrored from OpenCode), and OpenCode-style `statusline.mjs` (AGY 5h/7d quota bars) |
 | [`claude/`](./claude) | `~/.claude` & `~/.claude.json` (`mcpServers`) | Claude Code harness: unified `CLAUDE.md` (deduplicated with OpenCode), 9 native subagents (`haiku`/`sonnet`/`opus` at `medium` effort), `/init-harness` skill, 4 MCP servers merged non-destructively, `settings.json` defaults, and OpenCode-style `statusline.mjs` |
 | [`codex/`](./codex) | `~/.codex` | Codex CLI harness: `AGENTS.md`, `config.toml` (`gpt-6.2-sol` low orchestrator, `multi_agent = true`, 4 MCP servers with env-based auth), 9 TOML subagent configs (`gpt-6.2-sol` / `gpt-6-luna` / `gpt-6.1-terra` at `medium` effort), and `/init-harness` skill |
 | [`skills/`](./skills) | `~/.agents/skills` | 30 shared, on-demand skills loaded across OpenCode, Pi, AGY, and Codex |
@@ -66,6 +66,7 @@ bloant/
 ├── opencode/
 │   ├── AGENTS.md
 │   ├── opencode.json
+│   ├── system-permissions.json
 │   ├── cli.json
 │   ├── package.json
 │   ├── tui-preferences.jsonc
@@ -90,6 +91,7 @@ bloant/
 │   ├── AGENTS.md
 │   ├── skills.json
 │   ├── mcp_config.json
+│   ├── permissions.json
 │   ├── statusline.mjs
 │   ├── agents/
 │   └── skills/

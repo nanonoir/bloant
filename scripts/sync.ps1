@@ -166,24 +166,49 @@ if (Test-Path $AgyRepo) {
         }
     }
     $slSrc = Join-Path $AgyRepo 'statusline.mjs'
+    $permSrc = Join-Path $AgyRepo 'permissions.json'
     $AgyCliDir = Join-Path $UserHome '.gemini\antigravity-cli'
     $slDst = Join-Path $AgyCliDir 'statusline.mjs'
-    if (Test-Path $slSrc) {
+    $agySettingsPath = Join-Path $AgyCliDir 'settings.json'
+    if ((Test-Path $slSrc) -or (Test-Path $permSrc)) {
         if ($DryRun) {
-            Write-Host "[DryRun] copy statusline.mjs -> $slDst (and enable statusLine in settings.json)"
+            if (Test-Path $slSrc) { Write-Host "[DryRun] copy statusline.mjs -> $slDst (and enable statusLine in settings.json)" }
+            if (Test-Path $permSrc) { Write-Host "[DryRun] merge permissions (allow/ask/deny) -> $agySettingsPath (preserving existing rules & trustedWorkspaces)" }
         } else {
             Ensure-Dir $AgyCliDir
-            Copy-Item -Path $slSrc -Destination $slDst -Force
-            $agySettingsPath = Join-Path $AgyCliDir 'settings.json'
             $agySettings = if (Test-Path $agySettingsPath) { Get-Content $agySettingsPath -Raw -Encoding UTF8 | ConvertFrom-Json } else { [pscustomobject]@{} }
-            $slCfg = [pscustomobject]@{
-                type = 'command'
-                command = "node $($slDst -replace '\\', '/')"
-                enabled = $true
-                padding = 0
-                stack_with_default = $false
+            if (Test-Path $slSrc) {
+                Copy-Item -Path $slSrc -Destination $slDst -Force
+                $slCfg = [pscustomobject]@{
+                    type = 'command'
+                    command = "node $($slDst -replace '\\', '/')"
+                    enabled = $true
+                    padding = 0
+                    stack_with_default = $false
+                }
+                $agySettings | Add-Member -NotePropertyName 'statusLine' -NotePropertyValue $slCfg -Force
             }
-            $agySettings | Add-Member -NotePropertyName 'statusLine' -NotePropertyValue $slCfg -Force
+            if (Test-Path $permSrc) {
+                $permDefaults = Get-Content $permSrc -Raw -Encoding UTF8 | ConvertFrom-Json
+                if (-not $agySettings.PSObject.Properties['permissions'] -or -not $agySettings.permissions) {
+                    $agySettings | Add-Member -NotePropertyName 'permissions' -NotePropertyValue ([pscustomobject]@{}) -Force
+                }
+                foreach ($bucket in @('allow', 'ask', 'deny')) {
+                    if ($permDefaults.PSObject.Properties[$bucket] -and $permDefaults.$bucket) {
+                        $existingList = @()
+                        if ($agySettings.permissions.PSObject.Properties[$bucket] -and $agySettings.permissions.$bucket) {
+                            $existingList = @($agySettings.permissions.$bucket)
+                        }
+                        $mergedList = @($existingList)
+                        foreach ($rule in @($permDefaults.$bucket)) {
+                            if ($mergedList -cnotcontains $rule) {
+                                $mergedList += $rule
+                            }
+                        }
+                        $agySettings.permissions | Add-Member -NotePropertyName $bucket -NotePropertyValue $mergedList -Force
+                    }
+                }
+            }
             $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
             [System.IO.File]::WriteAllText($agySettingsPath, ($agySettings | ConvertTo-Json -Depth 10) + "`n", $utf8NoBom)
         }

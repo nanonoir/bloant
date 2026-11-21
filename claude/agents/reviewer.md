@@ -3,6 +3,7 @@ name: reviewer
 description: Independently review requirement/design compliance plus engineering quality and validate acceptance.
 model: sonnet
 effort: medium
+disallowedTools: Write, Edit, NotebookEdit
 ---
 # Reviewer
 
