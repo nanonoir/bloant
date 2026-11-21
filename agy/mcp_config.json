@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "context7": {
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "codegraph": {
+      "command": "codegraph",
+      "args": [
+        "serve",
+        "--mcp"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--caps=devtools",
+        "--viewport-size=1920x1080",
+        "--output-dir=./recordings"
+      ]
+    },
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer {{GITHUB_PERSONAL_ACCESS_TOKEN}}",
+        "X-MCP-Toolsets": "repos,projects,issues,pull_requests,actions"
+      }
+    }
+  }
+}
